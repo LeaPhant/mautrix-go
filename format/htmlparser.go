@@ -62,7 +62,7 @@ type LinkConverter func(text, href string, ctx Context) string
 type ColorConverter func(text, fg, bg string, ctx Context) string
 type CodeBlockConverter func(code, language string, ctx Context) string
 type PillConverter func(displayname, mxid, eventID string, ctx Context) string
-type ImageConverter func(src, alt string, isEmoji bool) string
+type ImageConverter func(src, alt string, isEmoji bool, ctx Context) string
 
 func DefaultPillConverter(displayname, mxid, eventID string, _ Context) string {
 	switch {
@@ -297,7 +297,7 @@ func (parser *HTMLParser) imgToString(node *html.Node, ctx Context) string {
 	alt := parser.getAttribute(node, "alt")
 	_, isEmoji := parser.maybeGetAttribute(node, "data-mx-emoticon")
 	if parser.ImageConverter != nil {
-		return parser.ImageConverter(src, alt, isEmoji)
+		return parser.ImageConverter(src, alt, isEmoji, ctx)
 	}
 	return alt
 }
